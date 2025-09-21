@@ -64,7 +64,7 @@ El e-commerce ha transformado el mercado moderno, pero las **Pequeñas y Mediana
 | **Autenticación** | NextAuth.js, JWT |
 | **Estilos** | CSS Modules, Responsive Design |
 | **Control de Versiones** | Git, GitHub |
-| **Despliegue** | Vercel (Recomendado) |
+| **Despliegue** | Vercel  |
 
 ## 📦 Requisitos del Sistema
 
