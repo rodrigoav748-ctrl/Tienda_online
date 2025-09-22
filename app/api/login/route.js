@@ -11,7 +11,11 @@ export async function POST(req) {
 
   // Validación básica
   if ((!email && !password) || !password) {
-    return new Response(JSON.stringify({ success: false, message: 'Todos los campos son obligatorios' }), { status: 400 });
+    return new Response(
+    JSON.stringify({ success: false, message: "Todos los campos son obligatorios" }),
+    { status: 400 }
+  );
+
   }
 
   try {

@@ -17,7 +17,7 @@
 - [🤝 Contribución](#-contribución)
 - [📄 Licencia](#-licencia)
 
-## 🎯 Contexto y Problemática
+## 🎯 Contexto y Problemática!
 
 El e-commerce ha transformado el mercado moderno, pero las **Pequeñas y Medianas Empresas (PYMES)** enfrentan barreras significativas:
 
