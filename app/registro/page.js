@@ -4,8 +4,8 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 export default function Registro() {
-  const [usuario, setUsuario] = useState('');
-  const [correo, setCorreo] = useState('');
+  const [nombre, setNombre] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const router = useRouter();
 
@@ -13,26 +13,56 @@ export default function Registro() {
     const res = await fetch('/api/registro', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ usuario, correo, password })
+      body: JSON.stringify({ nombre, email, password })
     });
 
     const data = await res.json();
     if (data.success) {
+      // Guarda el usuario en localStorage
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('usuario', JSON.stringify(data.usuario));
+      }
       alert('Usuario registrado correctamente');
-      router.push('/');
+      router.push('/cuenta');
     } else {
       alert(data.message);
     }
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '100px' }}>
-      <h1>Registrarse</h1>
-      <input type="text" placeholder="Usuario" value={usuario} onChange={e => setUsuario(e.target.value)} style={{ margin: '10px', padding: '8px' }}/>
-      <input type="email" placeholder="Correo" value={correo} onChange={e => setCorreo(e.target.value)} style={{ margin: '10px', padding: '8px' }}/>
-      <input type="password" placeholder="Contraseña" value={password} onChange={e => setPassword(e.target.value)} style={{ margin: '10px', padding: '8px' }}/>
-      <button onClick={handleRegistro} style={{ backgroundColor: 'red', color: 'white', padding: '10px 20px', margin: '10px' }}>Registrarse</button>
-      <button onClick={() => router.push('/')} style={{ padding: '10px 20px', margin: '10px' }}>Volver al inicio</button>
+    <div className="container">
+      <h1 className="title">Crear cuenta</h1>
+      <div className="form-group">
+        <input
+          type="text"
+          placeholder="Nombre de usuario"
+          value={nombre}
+          onChange={e => setNombre(e.target.value)}
+          required
+        />
+      </div>
+      <div className="form-group">
+        <input
+          type="text"
+          inputMode="email"
+          autoComplete="email"
+          placeholder="Correo electrónico"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+          required
+        />
+      </div>
+      <div className="form-group">
+        <input
+          type="password"
+          placeholder="Contraseña"
+          value={password}
+          onChange={e => setPassword(e.target.value)}
+          required
+        />
+      </div>
+      <button onClick={handleRegistro} className="login-button" style={{ width: '100%', marginBottom: 15 }}>Registrarse</button>
+      <button onClick={() => router.push('/')} className="cancelar" style={{ width: '100%' }}>Volver al inicio</button>
     </div>
   );
 }

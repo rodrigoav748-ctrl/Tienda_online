@@ -9,16 +9,16 @@ export async function POST(req) {
   // Extrae los datos del cuerpo de la petición
   const { email, password } = await req.json();
 
-  // Valida que los campos estén presentes
-  if (!email || !password) {
+  // Validación básica
+  if ((!email && !password) || !password) {
     return new Response(JSON.stringify({ success: false, message: 'Todos los campos son obligatorios' }), { status: 400 });
   }
 
   try {
-    // Busca el usuario por email
+    // Busca el usuario por email o nombre
     const [rows] = await pool.query(
-      'SELECT * FROM usuarios WHERE email = ?',
-      [email]
+      'SELECT * FROM usuarios WHERE email = ? OR nombre = ?',
+      [email, email]
     );
 
     if (rows.length === 0) {
@@ -28,14 +28,25 @@ export async function POST(req) {
 
     const user = rows[0];
 
-    // Verifica la contraseña
+    // Verifica la contraseña usando bcrypt
     const match = await bcrypt.compare(password, user.password_hash);
     if (!match) {
       return new Response(JSON.stringify({ success: false, message: 'Contraseña incorrecta' }), { status: 401 });
     }
 
-    // Devuelve datos del usuario autenticado
-    return new Response(JSON.stringify({ success: true, userId: user.id, nombre: user.nombre }), { status: 200 });
+    // Devuelve datos del usuario autenticado (id, nombre, email, rol)
+    return new Response(
+      JSON.stringify({
+        success: true,
+        usuario: {
+          id: user.id,
+          nombre: user.nombre,
+          email: user.email,
+          rol: user.rol
+        }
+      }),
+      { status: 200 }
+    );
   } catch (err) {
     // Maneja errores de la base de datos
     console.error(err);

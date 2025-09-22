@@ -1,29 +1,32 @@
-'use client';
 
+'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('');
+  const [usuario, setUsuario] = useState(''); // Puede ser email o nombre
   const [password, setPassword] = useState('');
   const router = useRouter();
 
+  // Maneja el envío del formulario de login
   const handleLogin = async (e) => {
     e.preventDefault();
-
     try {
       const response = await fetch('/api/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email: usuario, password }),
       });
-
-      if (response.ok) {
+      const data = await response.json();
+      if (response.ok && data.success) {
+        // Guarda el usuario autenticado en localStorage
+        if (data.usuario && typeof window !== 'undefined') {
+          localStorage.setItem('usuario', JSON.stringify(data.usuario));
+        }
         router.push('/tienda');
       } else {
-        const errorData = await response.json();
-        alert(errorData.message);
+        alert(data.message || 'Error al iniciar sesión');
       }
     } catch (error) {
       alert('Error de conexión. Inténtalo de nuevo.');
@@ -37,9 +40,9 @@ export default function LoginPage() {
         <div className="form-group">
           <input
             type="text"
-            placeholder="Gmail o numero de teléfono"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Correo o nombre de usuario"
+            value={usuario}
+            onChange={(e) => setUsuario(e.target.value)}
             required
           />
         </div>

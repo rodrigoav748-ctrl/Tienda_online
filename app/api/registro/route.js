@@ -19,11 +19,17 @@ export async function POST(req) {
 
   try {
     // Inserta el nuevo usuario en la base de datos
-    await pool.query(
+    const [result] = await pool.query(
       'INSERT INTO usuarios (nombre, email, password_hash) VALUES (?, ?, ?)',
       [nombre, email, password_hash]
     );
-    return new Response(JSON.stringify({ success: true }), { status: 200 });
+    // Obtiene el usuario recién creado usando el id insertado
+    const [rows] = await pool.query(
+      'SELECT id, nombre, email FROM usuarios WHERE id = ?',
+      [result.insertId]
+    );
+    const usuario = rows[0];
+    return new Response(JSON.stringify({ success: true, usuario }), { status: 200 });
   } catch (err) {
     // Maneja errores de la base de datos
     console.error(err);
