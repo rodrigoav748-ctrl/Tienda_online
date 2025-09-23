@@ -1,7 +1,6 @@
 // Importa NextResponse para manejar respuestas en Next.js
 import { NextResponse } from "next/server";
-// Importa el cliente de Prisma desde la carpeta donde se generó
-import { PrismaClient } from '../../lib/generated/prisma';
+import prisma from '../../lib/prisma';
 
 // Crea una única instancia del cliente de Prisma
 const prisma = new PrismaClient();
