@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
+
 export default function Pedido() {
   const [cart, setCart] = useState([]);
   const [total, setTotal] = useState(0);

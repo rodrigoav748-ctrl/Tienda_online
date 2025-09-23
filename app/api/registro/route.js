@@ -1,57 +1,30 @@
 ﻿import { NextResponse } from "next/server";
-import prisma from '../../lib/prisma';
+import prisma from '../../../lib/prisma';
 import bcrypt from 'bcryptjs';
 
-const prisma = new PrismaClient();
+export async function POST(req) {
+  const { nombre, email, password } = await req.json();
 
-export async function POST(request) {
+  if (!nombre || !email || !password) {
+    return NextResponse.json({ success: false, message: "Todos los campos son obligatorios" }, { status: 400 });
+  }
+
   try {
-    const data = await request.json();
-    const { nombre, email, password } = data;
+    const existingUser = await prisma.usuarios.findUnique({ where: { email } });
+    if (existingUser) return NextResponse.json({ success: false, message: "El usuario ya existe" }, { status: 409 });
 
-    if (!nombre || !email || !password) {
-      return NextResponse.json(
-        { error: "Faltan campos requeridos" },
-        { status: 400 }
-      );
-    }
-
-    // Hashea la contraseña
     const hashedPassword = await bcrypt.hash(password, 10);
-    
-    // Crea el nuevo usuario en la base de datos usando Prisma
     const newUser = await prisma.usuarios.create({
-      data: {
-        nombre,
-        email,
-        password_hash: hashedPassword,
-        rol: 'cliente',
-      },
-      select: {
-        id: true,
-        nombre: true,
-        email: true,
-      }
+      data: { nombre, email, password_hash: hashedPassword, rol: 'cliente' }
     });
 
-    return NextResponse.json(newUser, { status: 201 });
-    
+    return NextResponse.json({
+      success: true,
+      message: "Usuario registrado exitosamente",
+      usuario: { id: newUser.id, nombre, email }
+    });
   } catch (error) {
-    // Maneja el error específico de duplicado de email (código P2002 de Prisma)
-    if (error.code === 'P2002' && error.meta?.target?.includes('email')) {
-      return NextResponse.json(
-        { error: "El email ya está registrado" },
-        { status: 409 }
-      );
-    }
-
-    console.error("Error:", error);
-    return NextResponse.json(
-      { error: "Error al registrar usuario" },
-      { status: 500 }
-    );
-  } finally {
-    // Cierra la conexión de la base de datos
-    await prisma.$disconnect();
+    console.error(error);
+    return NextResponse.json({ success: false, message: "Error en el servidor" }, { status: 500 });
   }
 }

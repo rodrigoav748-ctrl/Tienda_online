@@ -1,5 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
+import prisma from '../../../prisma/client.js';
+
 
 export default function Pedidos() {
   const [pedidos, setPedidos] = useState([]);
