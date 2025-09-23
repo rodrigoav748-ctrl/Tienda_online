@@ -1,0 +1,88 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../lib/generated/prisma"
+}
+// Remove this second generator client block
+/*
+generator client {
+  provider = "prisma-client-js"
+}
+*/
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model usuarios {
+  id            Int      @id @default(autoincrement())
+  nombre        String   @db.VarChar(255)
+  email         String   @unique @db.VarChar(255)
+  password_hash String   @db.VarChar(255)
+  rol           String   @default("cliente") @db.VarChar(50)
+  pedidos       pedidos[]
+  ventas        ventas[]
+}
+
+model categorias {
+  id        Int       @id @default(autoincrement())
+  nombre    String    @db.VarChar(255)
+  productos productos[]
+}
+
+model productos {
+  id           Int           @id @default(autoincrement())
+  codigo       BigInt?       @unique
+  nombre       String        @db.VarChar(255)
+  descripcion  String?       @db.Text
+  precio       Decimal       @db.Decimal(10, 2)
+  stock        Int           @default(0)
+  categoria_id Int?
+  categoria    categorias?   @relation(fields: [categoria_id], references: [id])
+  detalle_pedidos detalle_pedidos[]
+  ventas       ventas[]
+}
+
+model pedidos {
+  id              Int               @id @default(autoincrement())
+  usuario_id      Int
+  fecha           DateTime          @default(now()) @db.Timestamp(0)
+  estado          String            @default("pendiente") @db.VarChar(50)
+  total           Decimal           @default(0) @db.Decimal(10, 2)
+  direccion_envio String?           @db.VarChar(255)
+  usuario         usuarios          @relation(fields: [usuario_id], references: [id])
+  detalle_pedidos detalle_pedidos[]
+}
+
+model detalle_pedidos {
+  id              Int      @id @default(autoincrement())
+  pedido_id       Int
+  producto_id     Int
+  cantidad        Int
+  precio_unitario Decimal  @db.Decimal(10, 2)
+  pedido          pedidos  @relation(fields: [pedido_id], references: [id], onDelete: Cascade)
+  producto        productos @relation(fields: [producto_id], references: [id])
+}
+
+model ventas {
+  id          Int      @id @default(autoincrement())
+  usuario_id  Int?
+  producto_id Int?
+  cantidad    Int
+  fecha       DateTime @default(now()) @db.Timestamp(0)
+  usuario     usuarios? @relation(fields: [usuario_id], references: [id])
+  producto    productos? @relation(fields: [producto_id], references: [id])
+}
+
+model contactos {
+  id      Int      @id @default(autoincrement())
+  nombre  String
+  mensaje String   @db.Text
+  fecha   DateTime @default(now())
+}
