@@ -1,7 +1,6 @@
 // Importa NextResponse para manejar respuestas en Next.js
-import { NextResponse } from 'next/server';
-// Importa el cliente de Prisma desde la carpeta donde se generó
-import { PrismaClient } from '../../../lib/generated/prisma';
+import { NextResponse } from "next/server";
+import prisma from '../../lib/prisma';
 // Importa bcrypt para comparar contraseñas
 import bcrypt from 'bcryptjs';
 
