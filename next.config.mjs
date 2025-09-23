@@ -1,4 +1,14 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const config = {
+  output: 'standalone',
+  trailingSlash: true,
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  // Configuración para Vercel
+  experimental: {
+    serverActions: true,
+  }
+};
 
-export default nextConfig;
+export default config;
