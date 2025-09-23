@@ -5,6 +5,10 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  // Configuración para Vercel
+  experimental: {
+    serverActions: true,
+  }
 }
 
 module.exports = nextConfig
