@@ -2,108 +2,12 @@
 SET FOREIGN_KEY_CHECKS=0;
 
 -- Eliminar tablas si existen
-DROP TABLE IF EXISTS pedidos_productos;
-DROP TABLE IF EXISTS pedidos;
-DROP TABLE IF EXISTS productos;
-DROP TABLE IF EXISTS categorias;
 DROP TABLE IF EXISTS usuarios;
+DROP TABLE IF EXISTS categorias;
 
--- Crear tabla de usuarios
 CREATE TABLE usuarios (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    nombre VARCHAR(100) NOT NULL,
-    email VARCHAR(100) UNIQUE NOT NULL,
-    password_hash VARCHAR(255) NOT NULL,
-    es_admin BOOLEAN DEFAULT FALSE,
-    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- Crear tabla de categorías
-CREATE TABLE categorias (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    nombre VARCHAR(50) NOT NULL,
-    descripcion TEXT,
-    imagen_url VARCHAR(255)
-);
-
--- Crear tabla de productos
-CREATE TABLE productos (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    nombre VARCHAR(100) NOT NULL,
-    descripcion TEXT,
-    precio DECIMAL(10,2) NOT NULL,
-    stock INT DEFAULT 0,
-    categoria_id INT,
-    imagen_url VARCHAR(255),
-    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (categoria_id) REFERENCES categorias(id)
-);
-
--- Crear tabla de pedidos
-CREATE TABLE pedidos (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    usuario_id INT,
-    estado ENUM('pendiente', 'procesando', 'enviado', 'entregado', 'cancelado') DEFAULT 'pendiente',
-    fecha_pedido TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    direccion_envio TEXT NOT NULL,
-    total DECIMAL(10,2) NOT NULL,
-    FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
-);
-
--- Crear tabla de relación pedidos-productos
-CREATE TABLE pedidos_productos (
-    pedido_id INT,
-    producto_id INT,
-    cantidad INT NOT NULL,
-    precio_unitario DECIMAL(10,2) NOT NULL,
-    PRIMARY KEY (pedido_id, producto_id),
-    FOREIGN KEY (pedido_id) REFERENCES pedidos(id),
-    FOREIGN KEY (producto_id) REFERENCES productos(id)
-);
-
--- Insertar datos de ejemplo en categorías
-INSERT INTO categorias (nombre, descripcion) VALUES
-('Electrónica', 'Productos electrónicos y gadgets'),
-('Ropa', 'Ropa y accesorios de moda'),
-('Hogar', 'Artículos para el hogar y decoración'),
-('Deportes', 'Equipamiento y ropa deportiva'),
-('Libros', 'Libros y material de lectura');
-
--- Insertar productos de ejemplo
-INSERT INTO productos (nombre, descripcion, precio, stock, categoria_id) VALUES
-('Smartphone XYZ', 'Último modelo con cámara de alta resolución', 599.99, 50, 1),
-('Laptop Pro', 'Potente laptop para trabajo y gaming', 999.99, 25, 1),
-('Tablet Ultra', 'Tablet ligera y versátil', 299.99, 30, 1),
-('Camiseta Básica', 'Camiseta de algodón 100%', 19.99, 100, 2),
-('Pantalón Casual', 'Pantalón cómodo para el día a día', 39.99, 75, 2),
-('Chaqueta Invierno', 'Chaqueta térmica resistente al agua', 89.99, 40, 2),
-('Lámpara LED', 'Lámpara moderna de bajo consumo', 29.99, 60, 3),
-('Juego de Sábanas', 'Sábanas de algodón egipcio', 49.99, 45, 3),
-('Balón de Fútbol', 'Balón oficial tamaño 5', 24.99, 80, 4),
-('Raqueta de Tenis', 'Raqueta profesional', 159.99, 20, 4),
-('Best Seller 2025', 'Libro más vendido del año', 14.99, 150, 5),
-('Diccionario Completo', 'Diccionario actualizado', 34.99, 70, 5);
-
--- Insertar usuario administrador de ejemplo (contraseña: admin123)
-INSERT INTO usuarios (nombre, email, password_hash, es_admin) VALUES
-('Admin', 'admin@example.com', '$2a$10$NB0S5H.wzgXw9E8k9QOxEuJFIE9GH8IZbNGsvHxVdxFs2K6BrfO6y', TRUE);
-
--- Insertar usuarios regulares de ejemplo (contraseña: user123)
-INSERT INTO usuarios (nombre, email, password_hash) VALUES
-('Juan Pérez', 'juan@example.com', '$2a$10$NB0S5H.wzgXw9E8k9QOxEuJFIE9GH8IZbNGsvHxVdxFs2K6BrfO6y'),
-('María García', 'maria@example.com', '$2a$10$NB0S5H.wzgXw9E8k9QOxEuJFIE9GH8IZbNGsvHxVdxFs2K6BrfO6y');
-
--- Insertar pedidos de ejemplo
-INSERT INTO pedidos (usuario_id, estado, direccion_envio, total) VALUES
-(2, 'procesando', 'Calle Principal 123, Ciudad', 659.97),
-(3, 'enviado', 'Avenida Central 456, Ciudad', 124.97);
-
--- Insertar detalles de pedidos
-INSERT INTO pedidos_productos (pedido_id, producto_id, cantidad, precio_unitario) VALUES
-(1, 1, 1, 599.99),
-(1, 4, 3, 19.99),
-(2, 7, 2, 29.99),
-(2, 11, 3, 14.99);
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
     rol VARCHAR(50) DEFAULT 'cliente'

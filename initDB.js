@@ -28,7 +28,10 @@ const dbConfig = {
   user: process.env.MYSQL_USER || 'root',
   password: process.env.MYSQL_PASSWORD || '',
   database: process.env.MYSQL_DATABASE || 'railway',
-  multipleStatements: true // Importante para ejecutar múltiples queries
+  multipleStatements: true, // Importante para ejecutar múltiples queries
+  ssl: {
+    rejectUnauthorized: true
+  }
 };
 
 // Debug: Mostrar configuración (sin mostrar la contraseña)
