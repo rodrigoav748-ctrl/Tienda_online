@@ -28,17 +28,7 @@ const dbConfig = {
   user: process.env.MYSQL_USER || 'root',
   password: process.env.MYSQL_PASSWORD || '',
   database: process.env.MYSQL_DATABASE || 'railway',
-  multipleStatements: true,
-  // Solo usar SSL en producción
-  ...(process.env.NODE_ENV === 'production' ? {
-    ssl: {
-      rejectUnauthorized: true
-    }
-  } : {}),
-  multipleStatements: true, // Importante para ejecutar múltiples queries
-  ssl: {
-    rejectUnauthorized: true
-  }
+  multipleStatements: true // Importante para ejecutar múltiples queries
 };
 
 // Debug: Mostrar configuración (sin mostrar la contraseña)
