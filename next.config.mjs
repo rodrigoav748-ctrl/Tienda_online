@@ -3,12 +3,7 @@ const config = {
   output: 'standalone',
   trailingSlash: true,
   eslint: {
-    ignoreDuringBuilds: true,
-  },
-  experimental: {
-    serverActions: {
-      enabled: true
-    }
+    ignoreDuringBuilds: true
   }
 };
 
