@@ -68,6 +68,35 @@ Esta aplicación web está diseñada para pequeñas y medianas empresas (PYMES) 
 
 ---
 
+
+npm install
+# o
+yarn install
+
+
+-- Crear base de datos
+CREATE DATABASE tienda_online_mvp;
+
+-- Ejecutar script de tablas y datos de prueba incluido en prisma/schema.sql
+-- Puedes usar  el .sql que esta en el repositorio
+
+DATABASE_URL="mysql://root:TU_PASSWORD@127.0.0.1:3306/tienda_online_mvp"
+NEXTAUTH_SECRET="una_cadena_segura_larga"
+NEXTAUTH_URL="http://localhost:3000"
+JWT_SECRET="otra_cadena_segura"
+
+
+npx prisma db push
+npx prisma generate
+Ejecutar la aplicación
+npm run dev
+# o
+yarn dev
+
+
+La aplicación estará disponible en http://localhost:3000.
+
+
 ## ⚙️ Instalación y Ejecución Local
 
 ### 1. Clonar repositorio
