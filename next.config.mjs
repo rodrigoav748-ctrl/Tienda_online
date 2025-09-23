@@ -5,9 +5,10 @@ const config = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  // Configuración para Vercel
   experimental: {
-    serverActions: true,
+    serverActions: {
+      enabled: true
+    }
   }
 };
 
