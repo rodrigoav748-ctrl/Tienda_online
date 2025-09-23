@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/next"
+    }
+  ],
+  "env": {
+    "MYSQL_HOST": "ballast.proxy.rlwy.net",
+    "MYSQL_PORT": "25609",
+    "MYSQL_USER": "root",
+    "MYSQL_DATABASE": "railway"
+  }
+}

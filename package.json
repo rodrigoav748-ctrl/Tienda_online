@@ -6,9 +6,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "lint": "eslint",
-    "postinstall": "node initDB.js"
+    "start": "node initDB.js && next start",
+    "lint": "eslint"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",

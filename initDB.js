@@ -9,6 +9,16 @@ if (process.env.NODE_ENV !== 'production') {
   dotenv.config();
 }
 
+// Verificar si tenemos todas las variables de entorno necesarias
+const requiredEnvVars = ['MYSQL_HOST', 'MYSQL_PORT', 'MYSQL_USER', 'MYSQL_PASSWORD', 'MYSQL_DATABASE'];
+const missingVars = requiredEnvVars.filter(varName => !process.env[varName]);
+
+if (missingVars.length > 0) {
+  console.log('Faltan variables de entorno necesarias:', missingVars);
+  console.log('Saltando la inicialización de la base de datos...');
+  process.exit(0);
+}
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
