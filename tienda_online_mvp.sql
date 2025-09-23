@@ -1,6 +1,9 @@
-DROP DATABASE IF EXISTS tienda_online_mvp;
-CREATE DATABASE tienda_online_mvp;
-USE tienda_online_mvp;
+-- Usar la base de datos proporcionada por Railway
+SET FOREIGN_KEY_CHECKS=0;
+
+-- Eliminar tablas si existen
+DROP TABLE IF EXISTS usuarios;
+DROP TABLE IF EXISTS categorias;
 
 CREATE TABLE usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
